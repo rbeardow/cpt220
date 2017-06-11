@@ -6,6 +6,8 @@
 * Start up code provided by Paul Miller
 ***********************************************************************/
 
+#include <time.h>
+#include <stdlib.h>
 #include "reversi_player.h"
 #include "reversi_gamerules.h"
 
@@ -38,8 +40,16 @@ enum input_result reversi_player_init(struct reversi_player * player)
  * a comma and no other input on the line). Then you should try to apply 
  * the move by calling the appropriate function in the game rules module.
  **/
-enum input_result reversi_player_move(struct reversi_player* curplayer, 
-    reversi_gameboard game_board)
+enum input_result reversi_player_move(struct reversi_player * curplayer,
+                                      reversi_gameboard game_board)
 {
     return IR_FAILURE;
+}
+
+void reversi_player_init_token(struct reversi_player * player1,
+                               struct reversi_player * player2)
+{
+    /* Randomise somehow, blue is 1, red is 2 */
+    player1->token = CC_BLUE;
+    player2->token = CC_RED;
 }

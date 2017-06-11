@@ -33,6 +33,7 @@ struct reversi_player_pair
     struct reversi_player * first;
     struct reversi_player * second;
 };
+
 /* initialise the player. please see the relevant section of the assignment
  * specification on the initialisation of the player to see what you 
  * need to do here
@@ -44,5 +45,7 @@ enum input_result reversi_player_init(struct reversi_player*);
  * by using other functions 
  */
 enum input_result reversi_player_move(struct reversi_player*, reversi_gameboard);
+
+void reversi_player_init_token(struct reversi_player*, struct reversi_player*);
 
 #endif

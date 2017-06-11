@@ -12,7 +12,6 @@
 #include <limits.h>
 #include <ctype.h>
 #include "reversi_shared.h"
-#include "reversi_gameboard.h"
 
 #ifndef REVERSI_HELPERS_H
 #define REVERSI_HELPERS_H
@@ -37,10 +36,13 @@ enum input_result
 BOOLEAN request_string(char * msg, int length, char * string);
 
 /*
- * Helper function to draw a banner of a specified length.
+ * Helper function to print a character a specified number of times.
  */
-void draw_banner(int length);
+void print_repeat(char *, int times);
 
+/*
+ * Helper function to print a message with an underline of the same length.
+ */
 void draw_underline(char * msg);
 
 /*

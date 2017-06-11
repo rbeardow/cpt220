@@ -10,20 +10,21 @@
 
 #define BANNER_CHAR "-"
 
+
+void print_repeat(char * msg, int times)
+{
+    int i;
+    for (i = 0; i < times; i++)
+    {
+        printf(msg);
+    }
+}
+
 void draw_underline(char * msg)
 {
     int length = strlen(msg);
     printf("%s\n", msg);
-    draw_banner(length);
-}
-
-void draw_banner(int length)
-{
-    int i;
-    for (i = 0; i < length; i++)
-    {
-        printf(BANNER_CHAR);
-    }
+    print_repeat(BANNER_CHAR, length);
     printf("\n");
 }
 
@@ -52,12 +53,19 @@ BOOLEAN request_string(char * msg, int length, char * string)
     }
     while (TRUE);
 
+    /*
+     * Null terminate the input string from the user and copy it to the 
+     * output variable.
+     */
+    input[strlen(input) - 1] = '\0';
     strcpy(string, input);
+    free(input);
+
     return TRUE;
 }
 
 /**
- * required for correct buffer handling. If you detect buffer overflow
+ * Required for correct buffer handling. If you detect buffer overflow
  * you should call this function. See the examples in 
  * ~e70949/shared/examples especially AdvIO and BasicIO
  **/

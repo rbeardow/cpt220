@@ -30,37 +30,36 @@ static void swap_players(struct reversi_player ** lhs,
 struct reversi_player_pair reversi_play_game(struct reversi_player players[])
 {
     /*int player_count;*/
-
-    struct reversi_player * player1 = &players[0];
-    struct reversi_player * player2 = &players[1];
-
+    reversi_gameboard board;
     struct reversi_player_pair result_pair;
-    struct reversi_player * current_player;
-    struct reversi_player * other_player;
+    struct reversi_player * current_player = &players[0];
+    struct reversi_player * other_player = &players[1];
 
     draw_underline("Welcome to Reversi");
+    reversi_player_init(current_player);
+    reversi_player_init(other_player);
+    reversi_player_init_token(current_player, other_player);
+
+    if (current_player->token != REVERSI_FIRST_PLAYER)
+    {
+        swap_players(&current_player, &other_player);
+    }
 
     /*
-    player1 = malloc(sizeof(struct reversi_player));
-    if (player1 == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
-
-    player2 = malloc(sizeof(struct reversi_player));
-    if (player2 == NULL) 
-    {
-        exit(EXIT_FAILURE);
-    }
+    printf("Player 1 is %s with colour %d\n", current_player->name, current_player->token);
+    printf("Player 2 is %s with colour %d\n", other_player->name, other_player->token);
+    printf("Player 1 is %s with colour %d\n", current_player->name, current_player->token);
+    printf("Player 2 is %s with colour %d\n", other_player->name, other_player->token);
     */
 
-    reversi_player_init(player1);
-    reversi_player_init(player2);
-
-    printf("Player 1 is %s", player1->name);
-    printf("Player 2 is %s", player2->name);
-
+    /*
     swap_players(&current_player, &other_player);
+    */
+    
+    reversi_gameboard_init(board);
+    reversi_gameboard_display(board);
+
+
 
 
     /*
