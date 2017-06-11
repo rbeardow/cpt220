@@ -66,17 +66,23 @@ static const enum reversi_cell_contents start_board[REVERSI_BOARDHEIGHT][REVERSI
  * simply copy the board defined above into the board (2d array) passed
  * into this function. 
  **/
-void reversi_gameboard_init(
-    enum reversi_cell_contents board[][REVERSI_BOARDWIDTH])
+void reversi_gameboard_init(reversi_gameboard board)
 {
+    /* TODO: Investigate memcpy version */
+    int i, j;
+    for (i = 0; i < REVERSI_BOARDHEIGHT; i++) {
+        for (j = 0; j < REVERSI_BOARDWIDTH; j++) {
+            board[i][j] = start_board[i][j];
+        }
+    }
 }
 
 /**
  * Display the game board. You need to display the game board in the 
  * same format as shown in the assignment specification. 
  **/
-void reversi_gameboard_display(
-    enum reversi_cell_contents board[][REVERSI_BOARDWIDTH])
+void reversi_gameboard_display(reversi_gameboard board)
 {
-}
+    
 
+}

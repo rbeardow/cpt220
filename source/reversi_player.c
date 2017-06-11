@@ -9,12 +9,24 @@
 #include "reversi_player.h"
 #include "reversi_gamerules.h"
 
+#define INITIAL_SCORE 0;
+
+
+
 /**
  * Initialise the player's data. You should prompt the user for their name,
  * set their token to CC_EMPTY and their score to 0.
  **/
-enum input_result reversi_player_init(struct reversi_player* curplayer)
+enum input_result reversi_player_init(struct reversi_player * player)
 {
+    char name[REVERSI_NAMELEN + 1];
+    BOOLEAN result = request_string("Please enter your name: ", REVERSI_NAMELEN, name);
+    if (result) {
+        strcpy(player->name, name);
+        player->score = INITIAL_SCORE;
+        player->token = CC_EMPTY;
+        return IR_SUCCESS;
+    }
     return IR_FAILURE;
 }
 

@@ -31,5 +31,21 @@ enum input_result
     IR_FAILURE, IR_SUCCESS, IR_RTM
 };
 
+/* 
+ * Helper function to request a string from stdio.
+ */
+BOOLEAN request_string(char * msg, int length, char * string);
+
+/*
+ * Helper function to draw a banner of a specified length.
+ */
+void draw_banner(int length);
+
+void draw_underline(char * msg);
+
+/*
+ * TODO: Decent comment for read_read_of_line.
+ */
 void read_rest_of_line(void);
+
 #endif

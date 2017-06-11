@@ -4,7 +4,19 @@
     "version": "0.1.0",
     "command": "gcc",
     "isShellCommand": true,
-    "args": ["-Wall", "-g", "-ansi", "-pedantic", "source/reversi.c", "-o", "reversi"],
+    "args": [
+        "-Wall", 
+        "-g", 
+        "-ansi", 
+        "-pedantic", 
+        "source/reversi_game.c", 
+        "source/reversi_gameboard.c", 
+        "source/reversi_gamerules.c", 
+        "source/reversi_helpers.c", 
+        "source/reversi_player.c", 
+        "source/reversi.c", 
+        "-o", 
+        "reversi"],
     "showOutput": "always",
     "fileLocation": ["relative","${workspaceRoot}"]
 }

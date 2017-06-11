@@ -15,5 +15,6 @@ int main(void)
      */
     struct reversi_player players[REVERSI_NUMPLAYERS];
     reversi_play_game(players);
-    return EXIT_FAILURE;
+
+    return EXIT_SUCCESS;
 }
