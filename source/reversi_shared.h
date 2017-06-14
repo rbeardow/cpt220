@@ -31,4 +31,6 @@ typedef enum {
 /* the maximum length of a line of output */
 #define REVERSI_LINELEN 80
 
+#define REVERSI_INITIAL_SCORE 0;
+
 #endif

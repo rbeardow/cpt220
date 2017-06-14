@@ -11,10 +11,6 @@
 #include "reversi_player.h"
 #include "reversi_gamerules.h"
 
-#define INITIAL_SCORE 0;
-
-
-
 /**
  * Initialise the player's data. You should prompt the user for their name,
  * set their token to CC_EMPTY and their score to 0.
@@ -22,10 +18,16 @@
 enum input_result reversi_player_init(struct reversi_player * player)
 {
     char name[REVERSI_NAMELEN + 1];
-    BOOLEAN result = request_string("Please enter your name: ", REVERSI_NAMELEN, name);
-    if (result) {
+    enum input_result result = request_string
+    (
+        "Please enter your name: ", 
+        REVERSI_NAMELEN, 
+        name
+    );
+    if (result == IR_SUCCESS) 
+    {
         strcpy(player->name, name);
-        player->score = INITIAL_SCORE;
+        player->score = REVERSI_INITIAL_SCORE;
         player->token = CC_EMPTY;
         return IR_SUCCESS;
     }
@@ -40,16 +42,109 @@ enum input_result reversi_player_init(struct reversi_player * player)
  * a comma and no other input on the line). Then you should try to apply 
  * the move by calling the appropriate function in the game rules module.
  **/
-enum input_result reversi_player_move(struct reversi_player * curplayer,
-                                      reversi_gameboard game_board)
+enum input_result reversi_player_move(struct reversi_player * player,
+                                      reversi_gameboard board)
 {
-    return IR_FAILURE;
+    const char * colour = reversi_cell_strings[player->token];
+    struct reversi_coordinate coords;
+    enum input_result coord_result;
+
+    reversi_player_calc_score(board, player);
+    printf("It is %s's turn and their colour is %s\n", player->name, colour);
+    printf("Their score is currently: %d\n", player->score);
+    
+    do
+    {
+        coord_result = reversi_request_coords(&coords);
+        if (coord_result == IR_SUCCESS)
+        {
+            printf("Coords are %d, %d\n", coords.x, coords.y);
+            if (reversi_rules_applymove(board, player, &coords))
+            {
+                return IR_SUCCESS;
+            }
+        }
+    }
+    while (coord_result != IR_RTM);
+    return coord_result;
 }
 
-void reversi_player_init_token(struct reversi_player * player1,
-                               struct reversi_player * player2)
+
+BOOLEAN reversi_is_valid_coord(int n)
 {
-    /* Randomise somehow, blue is 1, red is 2 */
-    player1->token = CC_BLUE;
-    player2->token = CC_RED;
+    if (n > 0 && n <= REVERSI_BOARDWIDTH)
+    {
+        return TRUE;
+    }
+    return FALSE;
+}
+
+BOOLEAN reversi_validate_coord(int n)
+{
+    if (n == PARSE_INT_FAILURE)
+    {
+        printf("Error: please specify a valid integer\n");
+        return FALSE;
+    }
+    else if (!reversi_is_valid_coord(n))
+    {
+        printf("Error: please specify a coordinate on the board\n");
+        return FALSE;
+    }
+    return TRUE;
+}
+
+BOOLEAN reversi_parse_coords(char * input,
+                             struct reversi_coordinate * coords)
+{
+    int x, y;
+    char * result;
+    int input_length = strlen(input);
+    if (input_length == REVERSI_COORDLEN)
+    {
+        result = strtok(input, DELIMS);
+        if (result != NULL)
+        {
+            x = parse_pos_int(result);
+            if (reversi_validate_coord(x))
+            {
+                result = strtok(NULL, DELIMS);
+                y = parse_pos_int(result);
+                if (reversi_validate_coord(y))
+                {
+                    coords->x = x;
+                    coords->y = y;
+                    return TRUE;
+                }
+            }
+        }
+    }
+    else if (input_length > REVERSI_COORDLEN) {
+        printf("Error: coordinates entered are too long\n");
+    }
+    else if (input_length < REVERSI_COORDLEN) {
+        printf("Error: coordinates entered are too short\n");
+    }
+    return FALSE;
+}
+
+enum input_result reversi_request_coords(struct reversi_coordinate * coords)
+{
+    char coords_input[REVERSI_COORD_LEN + 1];
+    enum input_result result;
+    do
+    {
+        result = request_string
+        (
+            "Please enter a move as a comma separated coordinate pair: ", 
+            REVERSI_COORD_LEN, 
+            coords_input
+        );
+        if (result == IR_SUCCESS && reversi_parse_coords(coords_input, coords))
+        {
+            return IR_SUCCESS;
+        }
+    }
+    while (result != IR_RTM);
+    return result;
 }

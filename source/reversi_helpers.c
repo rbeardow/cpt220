@@ -8,8 +8,6 @@
 
 #include "reversi_helpers.h"
 
-#define BANNER_CHAR "-"
-
 
 void print_repeat(char * msg, int times)
 {
@@ -28,10 +26,21 @@ void draw_underline(char * msg)
     printf("\n");
 }
 
-BOOLEAN request_string(char * msg, int length, char * string)
+int parse_pos_int(char * input)
+{
+    char * remaining;
+    long result = strtol(input, &remaining, DECIMAL);
+    if (result > 0) 
+    {
+        return result;
+    }
+    return PARSE_INT_FAILURE;
+}
+
+enum input_result request_string(char * msg, int length, char * string)
 {
     char * input;
-    input = malloc(sizeof(char) * (length + REVERSI_EXTRACHARS));
+    input = malloc(length + REVERSI_EXTRACHARS);
     if (input == NULL)
     {
         exit(EXIT_FAILURE);
@@ -39,14 +48,14 @@ BOOLEAN request_string(char * msg, int length, char * string)
 
     do
     {
-        printf("%s", msg);
+        printf(msg);
         fgets(input, length + REVERSI_EXTRACHARS, stdin);
         if (input[strlen(input) - 1] != '\n')
         {
             printf("Error: input was too long.\n");
             read_rest_of_line();
         }
-        else 
+        else
         {
             break;
         }
@@ -61,7 +70,7 @@ BOOLEAN request_string(char * msg, int length, char * string)
     strcpy(string, input);
     free(input);
 
-    return TRUE;
+    return IR_SUCCESS;
 }
 
 /**

@@ -11,10 +11,15 @@
 #include "reversi_gamerules.h"
 #ifndef REVERSI_GAME_H
 #define REVERSI_GAME_H
-/* implements the main game loop */
-struct reversi_player_pair reversi_play_game(
-    struct reversi_player[]);
-/* randomises the game at startup */
-struct reversi_player_pair reversi_random_start(
-    struct reversi_player[]);
+
+/* 
+ * Implements the main game loop.
+ */
+struct reversi_player_pair reversi_play_game(struct reversi_player[]);
+
+/* 
+ * Randomises the game at startup.
+ */
+struct reversi_player_pair reversi_random_start(struct reversi_player[]);
+
 #endif

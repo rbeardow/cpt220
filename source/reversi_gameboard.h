@@ -21,18 +21,16 @@
 /* Needed for the width of each cell when displaying */
 #define REVERSI_CELLWIDTH 5
 
-
 #define REVERSI_VERTICAL_CELL_CHAR "|"
 #define REVERSI_HORIZONTAL_CELL_CHAR "-"
 
-/* colour constants for displaying the board */
+/* Colour constants for displaying the board */
 #define ANSI_COLOR_RED "\x1b[31m"
 #define ANSI_COLOR_BLUE "\x1b[34m"
 #define ANSI_COLOR_RESET "\x1b[0m"
 #define REVERSI_NUM_TOKEN_TYPES 3
 
-/* Defines the first player as CC_BLUE */
-#define REVERSI_FIRST_PLAYER 1
+#define REVERSI_COORD_LEN 3
 
 enum reversi_cell_contents {
     CC_EMPTY, CC_BLUE, CC_RED
@@ -46,12 +44,13 @@ typedef enum reversi_cell_contents
     reversi_gameboard[REVERSI_BOARDHEIGHT][REVERSI_BOARDWIDTH];
 
 /* a coordinate in the system */
-struct reversi_coordinate{
-    int x,y;
+struct reversi_coordinate {
+    int x, y;
 };
 
 /* init the gameboard to the starting state - just copy the provided board */
 void reversi_gameboard_init(reversi_gameboard);
+
 void reversi_gameboard_display(reversi_gameboard);
 
 /*

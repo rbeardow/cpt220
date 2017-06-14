@@ -92,6 +92,11 @@ void reversi_gameboard_display(reversi_gameboard board)
     char column_index[NUMLEN];              /* Column index as string */
     enum reversi_cell_contents content;     /* Content of individual cell */
 
+
+    /*
+     * TODO: Must limit to 80 chars wide!!!!!!
+     */
+
     BOOLEAN first_row;
     BOOLEAN first_column;
     BOOLEAN last_column;
@@ -127,7 +132,7 @@ void reversi_gameboard_display(reversi_gameboard board)
             {   
                 if (first_column || last_column)
                 {
-                    reversi_draw_cell("", cell_width, !last_column);
+                    reversi_draw_cell(EMPTY_CHAR, cell_width, !last_column);
                 }
                 else
                 {
@@ -142,12 +147,12 @@ void reversi_gameboard_display(reversi_gameboard board)
             /* Draw trailing column */
             else if (last_column)
             {
-                reversi_draw_cell("", cell_width, FALSE);
+                reversi_draw_cell(EMPTY_CHAR, cell_width, FALSE);
             }
             /* Draw cell based on board state */
             else
             {
-                content = board[i][j];
+                content = board[i - 1][j - 1]; /* Offset for extra cells */
                 /*
                 reversi_draw_cell(reversi_cell_strings[content], 
                                   cell_width, 
@@ -163,26 +168,30 @@ void reversi_gameboard_display(reversi_gameboard board)
                 }
                 else 
                 {
-                    reversi_draw_cell("", cell_width, !last_column);
+                    reversi_draw_cell(EMPTY_CHAR, cell_width, !last_column);
                 }
 
             }
         }
         printf("\n");
-        print_repeat(REVERSI_HORIZONTAL_CELL_CHAR,
-                     REVERSI_BOARDWIDTH * REVERSI_CELLWIDTH);
+        print_repeat
+        (
+            REVERSI_HORIZONTAL_CELL_CHAR,
+            REVERSI_BOARDWIDTH * REVERSI_CELLWIDTH
+        );
         printf("\n");
     }
 
 }
 
-void reversi_draw_cell(const char * contents, int cell_width, BOOLEAN include_vert)
+void reversi_draw_cell(const char * contents, 
+                       const int cell_width, 
+                       const BOOLEAN include_vert)
 {
     int content_length;
     int padding_space;
     int pad_prefix;
     int pad_suffix;
-    int i;
 
     content_length = strlen(contents);
     padding_space = cell_width - content_length;
@@ -201,16 +210,10 @@ void reversi_draw_cell(const char * contents, int cell_width, BOOLEAN include_ve
         pad_prefix = (padding_space + 1) / 2;
         pad_suffix = pad_prefix - 1;
     }
-    
-    for (i = 0; i < pad_prefix; i++)
-    {
-        printf(" ");
-    }
+
+    print_repeat(SPACE_CHAR, pad_prefix);
     printf(contents);
-    for (i = 0; i < pad_suffix; i++)
-    {
-        printf(" ");
-    }
+    print_repeat(SPACE_CHAR, pad_suffix);
 
     if (include_vert)
     {
