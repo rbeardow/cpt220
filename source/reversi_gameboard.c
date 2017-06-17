@@ -193,13 +193,12 @@ void reversi_draw_cell(const char * contents,
                        const int cell_width, 
                        const BOOLEAN include_vert)
 {
-    int content_length;
+
     int padding_space;
     int pad_prefix;
     int pad_suffix;
 
-    content_length = strlen(contents);
-    padding_space = cell_width - content_length;
+    padding_space = cell_width - 1;
 
     if (padding_space < 0){
         fprintf(stderr, "Cell width too small for content width.");
