@@ -43,6 +43,9 @@ enum reversi_cell_contents
 /* Cell strings needed for displaying each value of empty, blue or red */
 extern const char * reversi_cell_strings[];
 
+/* Cell strings that display the "long" name of each value e.g. "blue" */
+extern const char * reversi_cell_strings_long[];
+
 /* The gameboard type */
 typedef enum reversi_cell_contents 
     reversi_gameboard[REVERSI_BOARDHEIGHT][REVERSI_BOARDWIDTH];

@@ -45,7 +45,7 @@ enum input_result reversi_player_init(struct reversi_player * player)
 enum input_result reversi_player_move(struct reversi_player * player,
                                       reversi_gameboard board)
 {
-    const char * colour = reversi_cell_strings[player->token];
+    const char * colour = reversi_cell_strings_long[player->token];
     struct reversi_coordinate coords;
     enum input_result coord_result;
 
