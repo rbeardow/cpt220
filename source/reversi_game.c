@@ -59,16 +59,11 @@ struct reversi_player_pair reversi_play_game(struct reversi_player players[])
         /* Test for gameover */
 
         reversi_gameboard_display(board);
-
-        /* Player turn */
         reversi_player_move(current_player, board);
-
-        /* Swap players */
         swap_players(&current_player, &other_player);
 
         /*end_of_game = TRUE;*/
     }
-
 
     return result_pair;
 }

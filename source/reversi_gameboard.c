@@ -70,8 +70,10 @@ void reversi_gameboard_init(reversi_gameboard board)
 {
     /* TODO: Investigate memcpy version */
     int i, j;
-    for (i = 0; i < REVERSI_BOARDHEIGHT; i++) {
-        for (j = 0; j < REVERSI_BOARDWIDTH; j++) {
+    for (i = 0; i < REVERSI_BOARDHEIGHT; i++) 
+    {
+        for (j = 0; j < REVERSI_BOARDWIDTH; j++) 
+        {
             board[i][j] = start_board[i][j];
         }
     }
@@ -87,15 +89,10 @@ void reversi_gameboard_display(reversi_gameboard board)
     int height = REVERSI_BOARDHEIGHT + 1;   /* Header row */
     int width = REVERSI_BOARDWIDTH + 2;     /* Leading and trailing cells */
     int cell_width;                         /* Calculated cell width */
-    int i, j;                               /* Loop indicies */
     char row_index[NUMLEN];                 /* Row index as string */                  
     char column_index[NUMLEN];              /* Column index as string */
     enum reversi_cell_contents content;     /* Content of individual cell */
-
-
-    /*
-     * TODO: Must limit to 80 chars wide!!!!!!
-     */
+    int i, j;                               /* Loop indicies */
 
     BOOLEAN first_row;
     BOOLEAN first_column;
@@ -197,7 +194,7 @@ void reversi_draw_cell(const char * contents,
     padding_space = cell_width - content_length;
 
     if (padding_space < 0){
-        fprintf(stderr, "Cell width to small for content width.");
+        fprintf(stderr, "Cell width too small for content width.");
         exit(EXIT_FAILURE);
     }
     else if (padding_space % 2 == 0)
