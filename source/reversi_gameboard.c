@@ -135,7 +135,7 @@ void reversi_gameboard_display(reversi_gameboard board)
             {   
                 if (first_column || last_column)
                 {
-                    reversi_draw_cell(EMPTY_CHAR, cell_width, !last_column);
+                    reversi_draw_cell(SPACE_CHAR, cell_width, !last_column);
                 }
                 else
                 {
@@ -150,7 +150,7 @@ void reversi_gameboard_display(reversi_gameboard board)
             /* Draw trailing column */
             else if (last_column)
             {
-                reversi_draw_cell(EMPTY_CHAR, cell_width, FALSE);
+                reversi_draw_cell(SPACE_CHAR, cell_width, FALSE);
             }
             /* Draw cell based on board state */
             else
@@ -172,10 +172,9 @@ void reversi_gameboard_display(reversi_gameboard board)
                 }
                 else 
                 {
-                    reversi_draw_cell(EMPTY_CHAR, cell_width, !last_column);
+                    reversi_draw_cell(SPACE_CHAR, cell_width, !last_column);
                 }
                 */
-
             }
         }
         printf("\n");
