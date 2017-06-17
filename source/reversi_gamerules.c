@@ -12,11 +12,28 @@ enum reversi_direction {
     DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_S, DIR_SW, DIR_W, DIR_NW
 };
 
+const char * reversi_direction_strings[8] = {
+    "N", "NE", "E", "SE", "S", "SW", "W", "NW"
+};
+
 struct reversi_direction_result
 {
     BOOLEAN success;
     enum reversi_cell_contents content;
 };
+
+void reversi_update_cell(reversi_gameboard board,
+                         const struct reversi_coordinate * coords,
+                         const enum reversi_cell_contents content)
+{
+    board[coords->y - 1][coords->x - 1] = content;
+}
+
+enum reversi_cell_contents reversi_get_cell(reversi_gameboard board,
+                                            const struct reversi_coordinate * coords)
+{
+    return board[coords->y - 1][coords->x - 1];
+}
 
 /*
  * Peeks in the specified direction starting at coords. Populates peek
@@ -83,20 +100,13 @@ BOOLEAN reversi_step_direction(reversi_gameboard board,
 
 }
 
-void reversi_update_cell(reversi_gameboard board,
-                         const struct reversi_coordinate * coords,
-                         const enum reversi_cell_contents content)
-{
-    board[coords->y - 1][coords->x - 1] = content;
-}
-
 /*
  * Attempts to capture all enemy pieces on the board in the specified direction
  * starting at the specified coords. If do_capture is FALSE, it is performed
  * as a dry run and the board is not updated (used for validation). If set
  * to TRUE, the board will be updated.
  */
-BOOLEAN reversi_capture_direction(reversi_gameboard board,
+BOOLEAN reversi_walk_direction(reversi_gameboard board,
                                   const enum reversi_direction direction,
                                   const struct reversi_coordinate * start,
                                   const enum reversi_cell_contents friend,
@@ -109,8 +119,6 @@ BOOLEAN reversi_capture_direction(reversi_gameboard board,
     BOOLEAN enemy_found;
     BOOLEAN step_success;
 
-    printf("Walking %d with start coords %d,%d\n", direction, start->x, start->y);
-
     next_coords.x = start->x;
     next_coords.y = start->y;
     enemy = (friend == CC_RED) ? CC_BLUE : CC_RED;
@@ -118,27 +126,23 @@ BOOLEAN reversi_capture_direction(reversi_gameboard board,
 
     while (TRUE)
     {
-        /*
-        printf("In loop, with coords %d,%d\n", next_coords.x, next_coords.y);
-        printf("Current cell is %d\n", next_cell);
-        printf("Taking a step...");
-        */
-        step_success = reversi_step_direction(board, direction, &next_coords, &next_cell);
-        /*
-        printf("Step success? %d\n", step_success);
-        printf("Step contents %d\n", next_cell);
-        */
+        /* Take a step in the desired direction */
+        step_success = reversi_step_direction
+        (
+            board, 
+            direction, 
+            &next_coords, 
+            &next_cell
+        );
+
         if (step_success && next_cell != CC_EMPTY)
         {   
-            printf("Hello\n");
             /* If the next cell is an enemy, we've found one and try capture */
             if (next_cell == enemy)
             {
                 enemy_found = TRUE;
                 if (do_capture)
                 {
-                    /* Mutate board */
-                    printf("Capture!!\n");
                     reversi_update_cell(board, &next_coords, friend);
                 }
             }
@@ -153,6 +157,7 @@ BOOLEAN reversi_capture_direction(reversi_gameboard board,
                 return TRUE;
             }
         }
+        /* Step failed (hit boundary) or next well was empty */
         else 
         {
             return FALSE;
@@ -162,44 +167,20 @@ BOOLEAN reversi_capture_direction(reversi_gameboard board,
     return FALSE;
 }
 
-
-BOOLEAN reversi_validate_move(reversi_gameboard board,
-                              const struct reversi_player * player,
-                              const struct reversi_coordinate * coords)
+BOOLEAN reversi_test_direction(reversi_gameboard board,
+                               const enum reversi_direction direction,
+                               const struct reversi_coordinate * start,
+                               const enum reversi_cell_contents friend)
 {
-    int dir;
-    enum reversi_cell_contents cell_contents;
-    enum reversi_cell_contents opposite_token;
+    return reversi_walk_direction(board, direction, start, friend, FALSE);
+}
 
-    printf("Determining if valid move\n");
-
-    cell_contents = board[coords->y - 1][coords->x - 1];
-
-    printf("Current player is %d\n", player->token);
-    opposite_token = player->token == CC_RED ? CC_BLUE : CC_RED;
-    printf("Opposite is %d\n", opposite_token);
-
-    if (cell_contents == CC_EMPTY)
-    {
-        printf("Cell is empty\n");
-        /* Test each direction */
-        for (dir = DIR_N; dir <= DIR_NW; dir++)
-        {
-            printf("Testing direction %d\n", dir);
-            if (reversi_capture_direction(board, dir, coords, player->token, FALSE))
-            {
-                printf("Valid direction found, optimistically begin capture\n");
-                reversi_capture_direction(board, dir, coords, player->token, TRUE);
-                return TRUE;
-            }
-            else
-            {
-                printf("Invalid direction\n");
-            }
-        }
-    }
-    printf("Error: You have entered an invalid move. Please try again.\n");
-    return FALSE;
+BOOLEAN reversi_capture_direction(reversi_gameboard board,
+                                  const enum reversi_direction direction,
+                                  const struct reversi_coordinate * start,
+                                  const enum reversi_cell_contents friend)
+{
+    return reversi_walk_direction(board, direction, start, friend, TRUE);
 }
 
 /**
@@ -212,15 +193,33 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard board,
                                 struct reversi_player * player,
                                 const struct reversi_coordinate * coords)
 {
-    printf("Applying move at %d, %d\n", coords->x, coords->y);
 
-    if (reversi_validate_move(board, player, coords))
+    int dir;
+    BOOLEAN valid_move = FALSE;
+    if (reversi_get_cell(board, coords) == CC_EMPTY)
     {
-        reversi_update_cell(board, coords, player->token);
-        return TRUE;
+        /* Test each direction */
+        for (dir = DIR_N; dir <= DIR_NW; dir++)
+        {
+            if (reversi_test_direction(board, dir, coords, player->token))
+            {
+                reversi_capture_direction(board, dir, coords, player->token);
+                valid_move = TRUE;
+            }
+        }
     }
 
-    return FALSE;
+    if (valid_move)
+    {
+        reversi_update_cell(board, coords, player->token);
+    }
+    else
+    {
+        printf("Error: You have entered an invalid move. Please try again.\n");
+    }
+    
+    return valid_move;
+
 }
 
 /**

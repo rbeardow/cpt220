@@ -101,12 +101,12 @@ void reversi_gameboard_display(reversi_gameboard board)
     for (i = 0; i < height; i++)
     {
         /* Convert row index to string for display */
-        snprintf(row_index, sizeof(row_index), "%d", i);
+        sprintf(row_index, "%d", i);
 
         for (j = 0; j < width; j++)
         {
             /* Convert column index to string for display */
-            snprintf(column_index, sizeof(column_index), "%d", j);
+            sprintf(column_index, "%d", j);
 
             /* For convenience and clarity */
             first_row = (i == 0) ? TRUE : FALSE;

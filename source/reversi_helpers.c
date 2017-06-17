@@ -37,6 +37,26 @@ int parse_pos_int(char * input)
     return PARSE_INT_FAILURE;
 }
 
+/*
+ * Displays quit menu. Assumes a return to menu option (enter) is same as y.
+ */
+BOOLEAN request_quit_menu()
+{
+    char option[REVERSI_MENU_OPT_LEN + 1];
+    enum input_result result = request_string
+    (
+        "really quit (y/n) ?", 
+        REVERSI_MENU_OPT_LEN, 
+        option
+    );
+    if (result == IR_RTM || (result == IR_SUCCESS && strcmp(option, "y") == 0))
+    {
+        return TRUE;
+    }
+    printf("quit declined\n");
+    return FALSE;
+}
+
 enum input_result request_string(char * msg, int length, char * string)
 {
     char * input;
@@ -69,6 +89,12 @@ enum input_result request_string(char * msg, int length, char * string)
     input[strlen(input) - 1] = '\0';
     strcpy(string, input);
     free(input);
+
+    /* If the string was just a new line, assume return to menu. */
+    if (strlen(string) == 0)
+    {
+        return IR_RTM;
+    }
 
     return IR_SUCCESS;
 }

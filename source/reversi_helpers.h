@@ -25,6 +25,7 @@
 #define PARSE_INT_FAILURE -1
 #define SPACE_CHAR " "
 #define EMPTY_CHAR ""
+#define REVERSI_MENU_OPT_LEN 1
 
 /* 
  * Defines the possible values of an io request - it could fail, succeed
@@ -34,6 +35,8 @@ enum input_result
 {
     IR_FAILURE, IR_SUCCESS, IR_RTM
 };
+
+BOOLEAN request_quit_menu();
 
 /* 
  * Helper function to request a string from stdio.

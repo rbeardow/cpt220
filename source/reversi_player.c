@@ -31,7 +31,7 @@ enum input_result reversi_player_init(struct reversi_player * player)
         player->token = CC_EMPTY;
         return IR_SUCCESS;
     }
-    return IR_FAILURE;
+    return result;
 }
 
 /**
@@ -52,21 +52,16 @@ enum input_result reversi_player_move(struct reversi_player * player,
     reversi_player_calc_score(board, player);
     printf("It is %s's turn and their colour is %s\n", player->name, colour);
     printf("Their score is currently: %d\n", player->score);
-    
-    do
+
+    coord_result = reversi_request_coords(&coords);
+    if (coord_result == IR_SUCCESS)
     {
-        coord_result = reversi_request_coords(&coords);
-        if (coord_result == IR_SUCCESS)
+        if (!reversi_rules_applymove(board, player, &coords))
         {
-            printf("Coords are %d, %d\n", coords.x, coords.y);
-            if (reversi_rules_applymove(board, player, &coords))
-            {
-                return IR_SUCCESS;
-            }
+            coord_result = IR_FAILURE;
         }
     }
-    while (coord_result != IR_RTM);
-    return coord_result;
+    return coord_result; 
 }
 
 
@@ -131,20 +126,27 @@ BOOLEAN reversi_parse_coords(char * input,
 enum input_result reversi_request_coords(struct reversi_coordinate * coords)
 {
     char coords_input[REVERSI_COORD_LEN + 1];
+    enum input_result coord_result;
     enum input_result result;
     do
     {
-        result = request_string
+        coord_result = request_string
         (
             "Please enter a move as a comma separated coordinate pair: ", 
             REVERSI_COORD_LEN, 
             coords_input
         );
-        if (result == IR_SUCCESS && reversi_parse_coords(coords_input, coords))
+        if (coord_result == IR_SUCCESS && 
+            reversi_parse_coords(coords_input, coords))
         {
-            return IR_SUCCESS;
+            result = IR_SUCCESS;
         }
+        else
+        {
+            result = IR_FAILURE;
+        }
+
     }
-    while (result != IR_RTM);
+    while (result == IR_FAILURE);
     return result;
 }

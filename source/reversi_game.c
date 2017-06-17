@@ -31,18 +31,45 @@ struct reversi_player_pair reversi_play_game(struct reversi_player players[])
 {
     /*int player_count;*/
     reversi_gameboard board;
-    struct reversi_player_pair result_pair;
+    struct reversi_player_pair result_pair = {NULL, NULL};
     struct reversi_player * current_player = &players[0];   /* Eww?*/
     struct reversi_player * other_player = &players[1];
-    BOOLEAN end_of_game;
+    enum input_result init_result;
+    enum input_result move_result;
+    BOOLEAN gameover;
+    BOOLEAN quitting;
 
     draw_underline("Welcome to Reversi");
 
     /*
-     * Initialise players.
+     * Initialise player 1.
      */
-    reversi_player_init(current_player);
-    reversi_player_init(other_player);
+    do
+    {
+        init_result = reversi_player_init(current_player);
+        if (init_result == IR_RTM && request_quit_menu())
+        {   
+            return result_pair;
+        }
+    }
+    while (init_result != IR_SUCCESS);
+
+    /*
+     * Initialise player 2.
+     */
+    do
+    {
+        init_result = reversi_player_init(other_player);
+        if (init_result == IR_RTM && request_quit_menu())
+        {
+            return result_pair;
+        }
+    }
+    while (init_result != IR_SUCCESS);
+    
+    /*
+     * Randomise players.
+     */
     result_pair = reversi_random_start(players);
 
     /*
@@ -53,16 +80,43 @@ struct reversi_player_pair reversi_play_game(struct reversi_player players[])
     /*
      * Start main game loop.
      */
-    end_of_game = FALSE;
-    while (!end_of_game) /* Also test for not quitting */
+    gameover = FALSE;
+    quitting = FALSE;
+    move_result = IR_SUCCESS;
+    while (!quitting && !gameover)
     {
         /* Test for gameover */
+        if (FALSE)
+        {
+            gameover = TRUE;
+            break;
+        }
 
         reversi_gameboard_display(board);
-        reversi_player_move(current_player, board);
-        swap_players(&current_player, &other_player);
 
-        /*end_of_game = TRUE;*/
+        do
+        {
+            move_result = reversi_player_move(current_player, board);
+            if (move_result == IR_RTM)
+            {
+                quitting = TRUE;
+                break;
+            }
+        }
+        while (move_result != IR_SUCCESS);
+        
+        swap_players(&current_player, &other_player);
+        
+    }
+
+    if (gameover)
+    {
+        
+    }
+    else
+    {
+        result_pair.first = NULL;
+        result_pair.second = NULL;
     }
 
     return result_pair;
