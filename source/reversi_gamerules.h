@@ -12,9 +12,27 @@
 #ifndef REVERSI_GAMERULES_H
 #define REVERSI_GAMERULES_H
 
+/*
+ * Enum for each possible direction to check on the board.
+ */
+enum reversi_direction {
+    DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_S, DIR_SW, DIR_W, DIR_NW
+};
+
+/*
+ * Result structure for checking a particular direction.
+ */
+struct reversi_direction_result
+{
+    BOOLEAN success;
+    enum reversi_cell_contents content;
+};
+
 /* 
  * Required to be implemented as part of the assignment. 
  * See the assignment specification for further details.
+ *
+ * ...
  */
 BOOLEAN reversi_rules_applymove(reversi_gameboard, 
                                 struct reversi_player *,
@@ -26,7 +44,8 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard,
 BOOLEAN reversi_rules_gameover(reversi_gameboard, struct reversi_player *);
 
 /*
- * Calculate the current score of the specified player.
+ * Calculate the current score of the specified player and updated the
+ * player structure.
  */
 void reversi_player_calc_score(reversi_gameboard, struct reversi_player *);
 

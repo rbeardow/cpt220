@@ -40,7 +40,7 @@ int parse_pos_int(char * input)
 /*
  * Displays quit menu. Assumes a return to menu option (enter) is same as y.
  */
-BOOLEAN request_quit_menu()
+BOOLEAN request_quit_confirmation()
 {
     char option[REVERSI_MENU_OPT_LEN + 1];
     enum input_result result = request_string

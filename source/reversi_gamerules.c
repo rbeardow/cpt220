@@ -8,42 +8,40 @@
 
 #include "reversi_gamerules.h"
 
-enum reversi_direction {
-    DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_S, DIR_SW, DIR_W, DIR_NW
-};
-
-const char * reversi_direction_strings[8] = {
-    "N", "NE", "E", "SE", "S", "SW", "W", "NW"
-};
-
-struct reversi_direction_result
-{
-    BOOLEAN success;
-    enum reversi_cell_contents content;
-};
-
-void reversi_update_cell(reversi_gameboard board,
+/*
+ * Convenience function to update the specified cell contents.
+ * For consistency and readability.
+ */
+static void reversi_update_cell(reversi_gameboard board,
                          const struct reversi_coordinate * coords,
                          const enum reversi_cell_contents content)
 {
     board[coords->y - 1][coords->x - 1] = content;
 }
 
-enum reversi_cell_contents reversi_get_cell(reversi_gameboard board,
+/*
+ * Convenience function to retrieve the specified cell contents. 
+ * For consistency and readability.
+ */
+static enum reversi_cell_contents reversi_get_cell(reversi_gameboard board,
                                             const struct reversi_coordinate * coords)
 {
     return board[coords->y - 1][coords->x - 1];
 }
 
 /*
- * Peeks in the specified direction starting at coords. Populates peek
- * with the cell contents in that direction if returns true, otherwise
- * returns false if you've hit a board boundary.
+ * Attempts to take a step in the specified direction on the board based on
+ * the starting coordinates in coords.
+ * If the cell in the specified direction is valid (i.e. on the board) then
+ * contents is populated with the contents of the cell, and coords is moved
+ * to be the new cell coordinates.
+ * This allows you to walk around the board in different directions and
+ * test cell contents safely.
  */
-BOOLEAN reversi_step_direction(reversi_gameboard board,
-                               const enum reversi_direction direction,
-                               struct reversi_coordinate * coords,
-                               enum reversi_cell_contents * contents)
+static BOOLEAN reversi_step_direction(reversi_gameboard board,
+                                      const enum reversi_direction direction,
+                                      struct reversi_coordinate * coords,
+                                      enum reversi_cell_contents * contents)
 {
     int test_x, test_y;
     switch (direction)
@@ -95,9 +93,7 @@ BOOLEAN reversi_step_direction(reversi_gameboard board,
         coords->y = test_y;
         return TRUE;
     }
-   
     return FALSE;
-
 }
 
 /*
@@ -106,11 +102,11 @@ BOOLEAN reversi_step_direction(reversi_gameboard board,
  * as a dry run and the board is not updated (used for validation). If set
  * to TRUE, the board will be updated.
  */
-BOOLEAN reversi_walk_direction(reversi_gameboard board,
-                                  const enum reversi_direction direction,
-                                  const struct reversi_coordinate * start,
-                                  const enum reversi_cell_contents friend,
-                                  const BOOLEAN do_capture)
+static BOOLEAN reversi_walk_direction(reversi_gameboard board,
+                                      const enum reversi_direction direction,
+                                      const struct reversi_coordinate * start,
+                                      const enum reversi_cell_contents friend,
+                                      const BOOLEAN do_capture)
 {
     
     struct reversi_coordinate next_coords;
@@ -157,7 +153,7 @@ BOOLEAN reversi_walk_direction(reversi_gameboard board,
                 return TRUE;
             }
         }
-        /* Step failed (hit boundary) or next well was empty */
+        /* Step failed (hit boundary) or next cell was empty */
         else 
         {
             return FALSE;
@@ -167,15 +163,22 @@ BOOLEAN reversi_walk_direction(reversi_gameboard board,
     return FALSE;
 }
 
-BOOLEAN reversi_test_direction(reversi_gameboard board,
-                               const enum reversi_direction direction,
-                               const struct reversi_coordinate * start,
-                               const enum reversi_cell_contents friend)
+/* 
+ * Tests the direction from start coords to see if it's valid.
+ * Returns TRUE if the path is a valid capturable path.
+ */
+static BOOLEAN reversi_test_direction(reversi_gameboard board,
+                                      const enum reversi_direction direction,
+                                      const struct reversi_coordinate * start,
+                                      const enum reversi_cell_contents friend)
 {
     return reversi_walk_direction(board, direction, start, friend, FALSE);
 }
 
-BOOLEAN reversi_capture_direction(reversi_gameboard board,
+/*
+ * Captures enemy pieces in the specified direction from start coords.
+ */
+static BOOLEAN reversi_capture_direction(reversi_gameboard board,
                                   const enum reversi_direction direction,
                                   const struct reversi_coordinate * start,
                                   const enum reversi_cell_contents friend)
@@ -219,24 +222,47 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard board,
     }
     
     return valid_move;
-
 }
 
-/**
+/*
  * Check if the current player has any move they can make. If they cannot, 
  * they have lost the game. 
- **/
+ * Returns TRUE if the player CANNOT make a move i.e. TRUE if gameover.
+ * 
+ * This is simply implemented as a brute force check of all directions from all
+ * empty cells. For now, this works - but it could be optimised.
+ */
 BOOLEAN reversi_rules_gameover(reversi_gameboard board, 
                                struct reversi_player * player)
 {
-    return FALSE;
+    struct reversi_coordinate coords;
+    int i, j, dir;
+    for (i = 0; i < REVERSI_BOARDHEIGHT; i++) 
+    {
+        for (j = 0; j < REVERSI_BOARDWIDTH; j++) 
+        {
+            coords.y = i;
+            coords.x = j;
+            if (board[i][j] == CC_EMPTY)
+            {
+                for (dir = DIR_N; dir <= DIR_NW; dir++)
+                {
+                    if (reversi_test_direction(board, dir, &coords, player->token))
+                    {
+                        return FALSE;
+                    }
+                }
+            }
+        }
+    }
+    return TRUE;
 }
 
 /**
  * Iterate over the board and count the number of tokens that are the same
  * colour as the token of the player specified.
  **/
-void reversi_player_calc_score(reversi_gameboard board, 
+void reversi_player_calc_score(reversi_gameboard board,
                                struct reversi_player * player)
 {
     int i, j;

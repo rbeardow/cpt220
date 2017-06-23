@@ -13,4 +13,3 @@
 #include "reversi_player.h"
 #include "reversi_game.h"
 #include "reversi_helpers.h"
-

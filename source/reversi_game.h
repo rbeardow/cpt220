@@ -22,4 +22,9 @@ struct reversi_player_pair reversi_play_game(struct reversi_player[]);
  */
 struct reversi_player_pair reversi_random_start(struct reversi_player[]);
 
+/*
+ * Displays the game over details in the end of game scenario.
+ */
+void reversi_gameover_display(struct reversi_player_pair pair);
+
 #endif

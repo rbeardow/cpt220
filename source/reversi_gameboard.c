@@ -8,30 +8,41 @@
 
 #include "reversi_gameboard.h"
 
-/**
+/*
  * convenience array that you can use to print out the cell contents for 
  * each cell. It is in the same order as the cell_contents enumeration and 
  * if you pass the array element to printf it will print out the data 
  * including the color information.
- **/
+ */
 const char * reversi_cell_strings[REVERSI_NUM_TOKEN_TYPES] = {
     " ", 
     ANSI_COLOR_BLUE "B" ANSI_COLOR_RESET,
     ANSI_COLOR_RED  "R" ANSI_COLOR_RESET
 };
 
+/*
+ * Similar to reversi_cell_strings, this provides a mapping between the token
+ * types and a longer "human readable" version of the token.
+ */
+ /*
 const char * reversi_cell_strings_long[REVERSI_NUM_TOKEN_TYPES] = {
     " ", 
     ANSI_COLOR_BLUE "blue" ANSI_COLOR_RESET,
     ANSI_COLOR_RED  "red" ANSI_COLOR_RESET
 };
+*/
+const char * reversi_cell_strings_long[REVERSI_NUM_TOKEN_TYPES] = {
+    " ", 
+    "blue",
+    "red"
+};
 
-/**
+/*
  * The default startup board. You just need to copy this board (not copy
  * and paste, but with code) into the board passed in by 
  * reversi_gameboard_init(). Please note that copying and pasting the 
  * code for the board will get you 0 marks for board initialisation.
- **/
+ */
 static const enum reversi_cell_contents start_board[REVERSI_BOARDHEIGHT][REVERSI_BOARDWIDTH] =
 {
     { 
@@ -68,10 +79,51 @@ static const enum reversi_cell_contents start_board[REVERSI_BOARDHEIGHT][REVERSI
     }
 };
 
-/**
+/*
+ * Draws a reversi gameboard cell of the specified width and contents. If
+ * include_vert is TRUE the RHS vertical character is included.
+ * Attempt to adjust the padding to fit the contents using cell_width.
+ */
+static void reversi_draw_cell(const char * contents, 
+                              const int cell_width, 
+                              const BOOLEAN include_vert)
+{
+
+    int padding_space;
+    int pad_prefix;
+    int pad_suffix;
+
+    padding_space = cell_width - 1;
+
+    if (padding_space < 0){
+        fprintf(stderr, "Cell width too small for content width.");
+        exit(EXIT_FAILURE);
+    }
+    else if (padding_space % 2 == 0)
+    {
+        pad_prefix = (padding_space / 2);
+        pad_suffix = pad_prefix;
+    }
+    else
+    {
+        pad_prefix = (padding_space + 1) / 2;
+        pad_suffix = pad_prefix - 1;
+    }
+
+    print_repeat(SPACE_CHAR, pad_prefix);
+    printf(contents);
+    print_repeat(SPACE_CHAR, pad_suffix);
+
+    if (include_vert)
+    {
+        printf(REVERSI_VERTICAL_CELL_CHAR);
+    }
+}
+
+/*
  * Simply copy the board defined above into the board (2d array) passed
  * into this function. 
- **/
+ */
 void reversi_gameboard_init(reversi_gameboard board)
 {
     /* TODO: Investigate memcpy version */
@@ -85,10 +137,13 @@ void reversi_gameboard_init(reversi_gameboard board)
     }
 }
 
-/**
+/*
  * Display the game board. You need to display the game board in the 
  * same format as shown in the assignment specification. 
- **/
+ * 
+ * This function is a little long for my liking, but the cognitative load
+ * is low so I did not decompose it. 
+ */
 void reversi_gameboard_display(reversi_gameboard board)
 {
 
@@ -106,15 +161,13 @@ void reversi_gameboard_display(reversi_gameboard board)
 
     for (i = 0; i < height; i++)
     {
-        /* Convert row index to string for display */
-        sprintf(row_index, "%d", i);
-
         for (j = 0; j < width; j++)
         {
-            /* Convert column index to string for display */
+            /* Convert cell indicies to strings for display */
+            sprintf(row_index, "%d", i);
             sprintf(column_index, "%d", j);
 
-            /* For convenience and clarity */
+            /* For convenience and code readability */
             first_row = (i == 0) ? TRUE : FALSE;
             first_column = (j == 0) ? TRUE : FALSE;
             last_column = (j == width - 1) ? TRUE : FALSE;
@@ -155,13 +208,16 @@ void reversi_gameboard_display(reversi_gameboard board)
             /* Draw cell based on board state */
             else
             {
-                content = board[i - 1][j - 1]; /* Offset for extra cells */
+                /* Offset for extra cells */
+                content = board[i - 1][j - 1]; 
+                /*
                 reversi_draw_cell(
                     reversi_cell_strings[content], 
                     cell_width, 
                     !last_column
                 );
-                /*
+                */
+                /* This is for windows only */
                 if (content == CC_BLUE)
                 {
                     reversi_draw_cell("B", cell_width, !last_column);
@@ -174,7 +230,6 @@ void reversi_gameboard_display(reversi_gameboard board)
                 {
                     reversi_draw_cell(SPACE_CHAR, cell_width, !last_column);
                 }
-                */
             }
         }
         printf("\n");
@@ -186,40 +241,4 @@ void reversi_gameboard_display(reversi_gameboard board)
         printf("\n");
     }
 
-}
-
-void reversi_draw_cell(const char * contents, 
-                       const int cell_width, 
-                       const BOOLEAN include_vert)
-{
-
-    int padding_space;
-    int pad_prefix;
-    int pad_suffix;
-
-    padding_space = cell_width - 1;
-
-    if (padding_space < 0){
-        fprintf(stderr, "Cell width too small for content width.");
-        exit(EXIT_FAILURE);
-    }
-    else if (padding_space % 2 == 0)
-    {
-        pad_prefix = (padding_space / 2);
-        pad_suffix = pad_prefix;
-    }
-    else
-    {
-        pad_prefix = (padding_space + 1) / 2;
-        pad_suffix = pad_prefix - 1;
-    }
-
-    print_repeat(SPACE_CHAR, pad_prefix);
-    printf(contents);
-    print_repeat(SPACE_CHAR, pad_suffix);
-
-    if (include_vert)
-    {
-        printf(REVERSI_VERTICAL_CELL_CHAR);
-    }
 }

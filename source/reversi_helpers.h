@@ -36,10 +36,17 @@ enum input_result
     IR_FAILURE, IR_SUCCESS, IR_RTM
 };
 
-BOOLEAN request_quit_menu();
+/*
+ * Helper function which provides a generic quit message. 
+ * Returns TRUE if user confirms the quit, FALSE otherwise.
+ * This is a BOOLEAN since on the quit menu an enter is considered the same
+ * as a yes.
+ */
+BOOLEAN request_quit_confirmation();
 
 /* 
  * Helper function to request a string from stdio.
+ * No input (enter) is considered a return to menu request.
  */
 enum input_result request_string(char * msg, int length, char * string);
 
@@ -55,6 +62,7 @@ void draw_underline(char * msg);
 
 /*
  * Helper function to parse a positive integer out of a string.
+ * Returns PARSE_INT_FAILURE on failure.
  */
 int parse_pos_int(char * input);
 

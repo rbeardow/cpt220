@@ -15,7 +15,9 @@
 #define REVERSI_NAMELEN 20
 #define REVERSI_COORDLEN 3
 
-/* Defines the first player colour */
+/* 
+ * Defines the first player colour 
+ */
 #define REVERSI_FIRST_PLAYER CC_BLUE
 
 /*
@@ -54,8 +56,5 @@ enum input_result reversi_player_init(struct reversi_player *);
  */
 enum input_result reversi_player_move(struct reversi_player *, 
                                       reversi_gameboard);
-
-
-enum input_result reversi_request_coords(struct reversi_coordinate *);
 
 #endif

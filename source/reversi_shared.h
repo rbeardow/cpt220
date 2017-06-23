@@ -12,7 +12,8 @@
 #ifndef SHARED_H
 #define SHARED_H
 
-/* definition of the BOOLEAN type. Note that enumerations start counting 
+/* 
+ * Definition of the BOOLEAN type. Note that enumerations start counting 
  * from 0 so here, FALSE has the value 0 and TRUE has the value 1. 
  * Please note that you cannot rely on true being 1 in C but rather 
  * true is a non-zero integer. For this reason you should not compare with
@@ -22,15 +23,24 @@ typedef enum {
     FALSE, TRUE
 } BOOLEAN;
 
-/* the number of players in the game */
+/* 
+ * The number of players in the game 
+ */
 #define REVERSI_NUMPLAYERS 2
 
-/* additional characters appended by fgets() */
+/* 
+ * Additional characters appended by fgets() 
+ */
 #define REVERSI_EXTRACHARS 2
 
-/* the maximum length of a line of output */
+/* 
+ * The maximum length of a line of output 
+ */
 #define REVERSI_LINELEN 80
 
+/*
+ * The inital score of each player
+ */
 #define REVERSI_INITIAL_SCORE 0;
 
 #endif
