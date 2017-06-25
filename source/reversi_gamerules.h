@@ -1,8 +1,8 @@
 /***********************************************************************
 * CPT220 - Programming in C
 * Study Period 2 2017 Assignment #1 
-* Full Name        : EDIT HERE
-* Student Number   : EDIT HERE
+* Full Name        : Robert Ashton Beardow
+* Student Number   : S3641721
 * Start up code provided by Paul Miller
 ***********************************************************************/
 

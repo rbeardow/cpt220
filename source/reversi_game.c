@@ -1,8 +1,8 @@
 /***********************************************************************
 * CPT220 - Programming in C
 * Study Period 2 2017 Assignment #1 
-* Full Name        : EDIT HERE
-* Student Number   : EDIT HERE
+* Full Name        : Robert Ashton Beardow
+* Student Number   : S3641721
 * Start up code provided by Paul Miller
 ***********************************************************************/
 
@@ -61,8 +61,6 @@ struct reversi_player_pair reversi_play_game(struct reversi_player players[])
         }
     }
     while (init_result != IR_SUCCESS);
-
-    printf("Ready player 1 %d\n", current_player->token);
 
     player_pair = reversi_random_start(players);
 

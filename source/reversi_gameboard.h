@@ -1,8 +1,8 @@
 /***********************************************************************
 * CPT220 - Programming in C
 * Study Period 2 2017 Assignment #1 
-* Full Name        : EDIT HERE
-* Student Number   : EDIT HERE
+* Full Name        : Robert Ashton Beardow
+* Student Number   : S3641721
 * Start up code provided by Paul Miller
 ***********************************************************************/
 
@@ -58,7 +58,9 @@ enum reversi_cell_contents
 extern const char * reversi_cell_strings[];
 
 /* 
- * Cell strings that display the "long" name of each value e.g. "blue" 
+ * Cell strings that display the "long" name of each value e.g. "blue".
+ * I know the requirements are for no global variables, but I think this
+ * one is justified as a sibling of the above reversi_cell_strings.
  */
 extern const char * reversi_cell_strings_long[];
 
@@ -85,6 +87,5 @@ void reversi_gameboard_init(reversi_gameboard);
  * Render the gameboard to the screen.
  */
 void reversi_gameboard_display(reversi_gameboard);
-
 
 #endif
