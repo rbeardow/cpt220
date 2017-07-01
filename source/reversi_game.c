@@ -24,15 +24,55 @@ static void swap_players(struct reversi_player ** player1,
 }
 
 /*
+ * Displays the game over details on the screen.
+ */
+static void reversi_gameover_display(struct reversi_player_pair pair)
+{
+    int p1_total = pair.first->score;
+    int p2_total = pair.second->score;
+    struct reversi_player * winner;
+    char * plural;
+    int win_amount;
+
+    if (p1_total != p2_total)
+    {
+        if (p1_total > p2_total)
+        {
+            winner = pair.first;
+            win_amount = p1_total - p2_total;
+        }
+        else
+        {
+            winner = pair.second;
+            win_amount = p2_total - p1_total;
+        }
+        plural = win_amount > 1 ? "s" : EMPTY_CHAR;
+        printf(
+            "The winner was %s and they won by %d point%s.\n", 
+            winner->name, 
+            win_amount, 
+            plural
+        );
+    }
+    else
+    {
+        printf("The game was a draw.\n");
+    }
+}
+
+/*
  * Implements the game loop for the game. Please see the assignment 
  * specification for the full discussion of the algorithm you need to 
  * implement here.
+ *
+ * As discussed on the board, I have left this function returning a player pair
+ * structure instead of switching it to void.
  */
 struct reversi_player_pair reversi_play_game(struct reversi_player players[])
 {
 
     reversi_gameboard board;
-    struct reversi_player_pair empty_pair;
+    struct reversi_player_pair empty_pair = {NULL, NULL};
     struct reversi_player_pair player_pair;
     struct reversi_player * current_player;
     struct reversi_player * other_player;
@@ -75,6 +115,9 @@ struct reversi_player_pair reversi_play_game(struct reversi_player players[])
 
     while (TRUE)
     {
+
+        reversi_player_calc_score(board, current_player);
+        reversi_player_calc_score(board, other_player);
 
         if (reversi_rules_gameover(board, current_player))
         {
@@ -128,41 +171,4 @@ struct reversi_player_pair reversi_random_start(struct reversi_player players[])
     pair.first->token = CC_BLUE;
     pair.second->token = CC_RED;
     return pair;
-}
-
-/*
- * Displays the game over details on the screen.
- */
-void reversi_gameover_display(struct reversi_player_pair pair)
-{
-    int p1_total = pair.first->score;
-    int p2_total = pair.second->score;
-    struct reversi_player * winner;
-    char * plural;
-    int win_amount;
-
-    if (p1_total != p2_total)
-    {
-        if (p1_total > p2_total)
-        {
-            winner = pair.first;
-            win_amount = p1_total - p2_total;
-        }
-        else
-        {
-            winner = pair.second;
-            win_amount = p2_total - p1_total;
-        }
-        plural = win_amount > 1 ? "s" : EMPTY_CHAR;
-        printf(
-            "The winner was %s and they won by %d point%s.\n", 
-            winner->name, 
-            win_amount, 
-            plural
-        );
-    }
-    else
-    {
-        printf("The game was a draw.\n");
-    }
 }

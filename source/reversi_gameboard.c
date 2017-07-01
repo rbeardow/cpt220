@@ -24,18 +24,18 @@ const char * reversi_cell_strings[REVERSI_NUM_TOKEN_TYPES] = {
  * Similar to reversi_cell_strings, this provides a mapping between the token
  * types and a longer "human readable" version of the token.
  */
- /*
 const char * reversi_cell_strings_long[REVERSI_NUM_TOKEN_TYPES] = {
     " ", 
     ANSI_COLOR_BLUE "blue" ANSI_COLOR_RESET,
     ANSI_COLOR_RED  "red" ANSI_COLOR_RESET
 };
-*/
+ /*
 const char * reversi_cell_strings_long[REVERSI_NUM_TOKEN_TYPES] = {
     " ", 
     "blue",
     "red"
 };
+*/
 
 /*
  * The default startup board. You just need to copy this board (not copy
@@ -210,14 +210,13 @@ void reversi_gameboard_display(reversi_gameboard board)
             {
                 /* Offset for extra cells */
                 content = board[i - 1][j - 1]; 
-                /*
                 reversi_draw_cell(
                     reversi_cell_strings[content], 
                     cell_width, 
                     !last_column
                 );
-                */
                 /* This is for windows only */
+                /*
                 if (content == CC_BLUE)
                 {
                     reversi_draw_cell("B", cell_width, !last_column);
@@ -230,6 +229,7 @@ void reversi_gameboard_display(reversi_gameboard board)
                 {
                     reversi_draw_cell(SPACE_CHAR, cell_width, !last_column);
                 }
+                */
             }
         }
         printf("\n");
