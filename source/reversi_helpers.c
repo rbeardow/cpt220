@@ -51,7 +51,7 @@ BOOLEAN request_quit_confirmation()
     enum input_result result = request_string
     (
         "really quit (y/n) ?", 
-        REVERSI_MENU_OPT_LEN, 
+        REVERSI_MENU_OPT_LEN,
         option
     );
     if (result == IR_SUCCESS && strcmp(option, "y") == 0)
@@ -75,11 +75,17 @@ enum input_result request_string(char * msg, int length, char * string)
     do
     {
         printf(msg);
-        fgets(input, length + REVERSI_EXTRACHARS, stdin);
-        if (input[strlen(input) - 1] != '\n')
+        if (fgets(input, length + REVERSI_EXTRACHARS, stdin) != NULL)
         {
-            printf("Error: input was too long.\n");
-            read_rest_of_line();
+            if (input[strlen(input) - 1] != '\n')
+            {
+                printf("Error: input was too long.\n");
+                read_rest_of_line();
+            }
+            else
+            {
+                break;
+            }
         }
         else
         {
@@ -92,11 +98,12 @@ enum input_result request_string(char * msg, int length, char * string)
      * Null terminate the input string from the user and copy it to the 
      * output variable.
      */
+    printf("String length is %d\n", strlen(input));
     input[strlen(input) - 1] = '\0';
     strcpy(string, input);
     free(input);
 
-    /* If the string was just a new line, assume return to menu. */
+    /* If the string was empty, assume return to menu. */
     if (strlen(string) == 0)
     {
         return IR_RTM;
