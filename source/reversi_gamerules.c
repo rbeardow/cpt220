@@ -13,8 +13,8 @@
  * For consistency and readability.
  */
 static void reversi_update_cell(reversi_gameboard board,
-                         const struct reversi_coordinate * coords,
-                         const enum reversi_cell_contents content)
+                                const struct reversi_coordinate * coords,
+                                const enum reversi_cell_contents content)
 {
     board[coords->y - 1][coords->x - 1] = content;
 }
@@ -23,8 +23,10 @@ static void reversi_update_cell(reversi_gameboard board,
  * Convenience function to retrieve the specified cell contents. 
  * For consistency and readability.
  */
-static enum reversi_cell_contents reversi_get_cell(reversi_gameboard board,
-                                            const struct reversi_coordinate * coords)
+static enum reversi_cell_contents reversi_get_cell(
+    reversi_gameboard board,
+    const struct reversi_coordinate * coords
+)
 {
     return board[coords->y - 1][coords->x - 1];
 }
@@ -186,12 +188,12 @@ static BOOLEAN reversi_capture_direction(reversi_gameboard board,
     return reversi_walk_direction(board, direction, start, friend, TRUE);
 }
 
-/**
+/*
  * This function actually applies a move. You should first test whether the
  * requested player move is valid (test all directions!) and then capture
  * all pieces in valid directions. If this is not a valid move, simply 
  * return FALSE.
- **/
+ */
 BOOLEAN reversi_rules_applymove(reversi_gameboard board, 
                                 struct reversi_player * player,
                                 const struct reversi_coordinate * coords)
@@ -199,6 +201,7 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard board,
 
     int dir;
     BOOLEAN valid_move = FALSE;
+
     if (reversi_get_cell(board, coords) == CC_EMPTY)
     {
         /* Test each direction */
@@ -226,7 +229,9 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard board,
 
 /*
  * Check if the current player has any move they can make. If they cannot, 
- * they have lost the game. 
+ * they have lost the game. I chose to make the isfull check part of the
+ * gameover condition as it seems like part of the gameover rules.
+ *
  * Returns TRUE if the player CANNOT make a move i.e. TRUE if gameover.
  * 
  * This is simply implemented as a brute force check of all directions from all
@@ -235,8 +240,17 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard board,
 BOOLEAN reversi_rules_gameover(reversi_gameboard board, 
                                struct reversi_player * player)
 {
+
     struct reversi_coordinate coords;
     int i, j, dir;
+
+    /* If the board is full, instant gameover */
+    if (reversi_gameboard_isfull(board))
+    {
+        return TRUE;
+    }
+
+    /* Brute force each empty cell for a valid move */
     for (i = 0; i < REVERSI_BOARDHEIGHT; i++) 
     {
         for (j = 0; j < REVERSI_BOARDWIDTH; j++) 
@@ -258,10 +272,10 @@ BOOLEAN reversi_rules_gameover(reversi_gameboard board,
     return TRUE;
 }
 
-/**
+/*
  * Iterate over the board and count the number of tokens that are the same
  * colour as the token of the player specified.
- **/
+ */
 void reversi_player_calc_score(reversi_gameboard board,
                                struct reversi_player * player)
 {

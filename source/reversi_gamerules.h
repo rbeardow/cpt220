@@ -19,20 +19,9 @@ enum reversi_direction {
     DIR_N, DIR_NE, DIR_E, DIR_SE, DIR_S, DIR_SW, DIR_W, DIR_NW
 };
 
-/*
- * Result structure for checking a particular direction.
- */
-struct reversi_direction_result
-{
-    BOOLEAN success;
-    enum reversi_cell_contents content;
-};
-
 /* 
  * Required to be implemented as part of the assignment. 
  * See the assignment specification for further details.
- *
- * ...
  */
 BOOLEAN reversi_rules_applymove(reversi_gameboard, 
                                 struct reversi_player *,

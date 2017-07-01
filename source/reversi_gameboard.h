@@ -88,4 +88,9 @@ void reversi_gameboard_init(reversi_gameboard);
  */
 void reversi_gameboard_display(reversi_gameboard);
 
+/*
+ * Determines whether the board is full and returns TRUE if it is.
+ */
+BOOLEAN reversi_gameboard_isfull(reversi_gameboard);
+
 #endif

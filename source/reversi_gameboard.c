@@ -142,7 +142,7 @@ void reversi_gameboard_init(reversi_gameboard board)
  * same format as shown in the assignment specification. 
  * 
  * This function is a little long for my liking, but the cognitative load
- * is low so I did not decompose it. 
+ * is low so I did not decompose it.
  */
 void reversi_gameboard_display(reversi_gameboard board)
 {
@@ -241,4 +241,24 @@ void reversi_gameboard_display(reversi_gameboard board)
         printf("\n");
     }
 
+}
+
+/*
+ * Determines whether the gameboard is full by checking the contents of 
+ * every cell - if any are empty, the board is not full.
+ */
+BOOLEAN reversi_gameboard_isfull(reversi_gameboard board)
+{
+    int i, j;
+    for (i = 0; i < REVERSI_BOARDHEIGHT; i++) 
+    {
+        for (j = 0; j < REVERSI_BOARDWIDTH; j++) 
+        {
+            if (board[i][j] == CC_EMPTY)
+            {
+                return FALSE;
+            }
+        }
+    }
+    return TRUE;
 }

@@ -13,7 +13,6 @@
 #ifndef REVERSI_PLAYER_H
 #define REVERSI_PLAYER_H
 #define REVERSI_NAMELEN 20
-#define REVERSI_COORDLEN 3
 
 /* 
  * Defines the first player colour 

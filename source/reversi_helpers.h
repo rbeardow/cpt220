@@ -22,9 +22,9 @@
 #define REVERSI_MAX_STACK 200
 #define DELIMS ","
 #define BANNER_CHAR "-"
-#define PARSE_INT_FAILURE -1
 #define SPACE_CHAR " "
 #define EMPTY_CHAR ""
+#define PARSE_INT_FAILURE -1
 #define REVERSI_MENU_OPT_LEN 1
 
 /* 

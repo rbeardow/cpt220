@@ -38,7 +38,12 @@ int parse_pos_int(char * input)
 }
 
 /*
- * Displays quit menu. Assumes a return to menu option (enter) is same as y.
+ * Displays quit menu.
+ * I chose to make this a BOOLEAN instead of input_result type as there are 
+ * really only two types of results from this request - positive ('y') and 
+ * negative (everything else). I did notice this is different behaviour than
+ * the sample, however on the discussion boards you suggested that only accepting
+ * 'y' to quite is the correct behaviour.
  */
 BOOLEAN request_quit_confirmation()
 {
@@ -49,11 +54,11 @@ BOOLEAN request_quit_confirmation()
         REVERSI_MENU_OPT_LEN, 
         option
     );
-    if (result == IR_RTM || (result == IR_SUCCESS && strcmp(option, "y") == 0))
+    if (result == IR_SUCCESS && strcmp(option, "y") == 0)
     {
         return TRUE;
     }
-    printf("quit declined\n");
+    printf("Quit declined\n");
     return FALSE;
 }
 
@@ -63,6 +68,7 @@ enum input_result request_string(char * msg, int length, char * string)
     input = malloc(length + REVERSI_EXTRACHARS);
     if (input == NULL)
     {
+        printf("Error: cannot allocate memory for input string in request_string.");
         exit(EXIT_FAILURE);
     }
 

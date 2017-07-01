@@ -51,7 +51,7 @@ static BOOLEAN reversi_parse_coords(char * input,
     int x, y;
     char * result;
     int input_length = strlen(input);
-    if (input_length == REVERSI_COORDLEN)
+    if (input_length == MOVE_STR_LEN)
     {
         result = strtok(input, DELIMS);
         if (result != NULL)
@@ -70,10 +70,10 @@ static BOOLEAN reversi_parse_coords(char * input,
             }
         }
     }
-    else if (input_length > REVERSI_COORDLEN) {
+    else if (input_length > MOVE_STR_LEN) {
         printf("Error: coordinates entered are too long\n");
     }
-    else if (input_length < REVERSI_COORDLEN) {
+    else if (input_length < MOVE_STR_LEN) {
         printf("Error: coordinates entered are too short\n");
     }
     return FALSE;
@@ -106,10 +106,10 @@ static enum input_result reversi_request_coords(struct reversi_coordinate * coor
     return coord_result;
 }
 
-/**
+/*
  * Initialise the player's data. You should prompt the user for their name,
  * set their token to CC_EMPTY and their score to 0.
- **/
+ */
 enum input_result reversi_player_init(struct reversi_player * player)
 {
     char name[REVERSI_NAMELEN + 1];
