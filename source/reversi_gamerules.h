@@ -20,7 +20,7 @@ enum reversi_direction {
 };
 
 /* 
- * Required to be implemented as part of the assignment. 
+ * Required to be implemented as part of the assignment.
  * See the assignment specification for further details.
  */
 BOOLEAN reversi_rules_applymove(reversi_gameboard, 

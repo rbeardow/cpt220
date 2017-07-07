@@ -9,7 +9,7 @@
 #include "reversi_gameboard.h"
 
 /*
- * convenience array that you can use to print out the cell contents for 
+ * Convenience array that you can use to print out the cell contents for 
  * each cell. It is in the same order as the cell_contents enumeration and 
  * if you pass the array element to printf it will print out the data 
  * including the color information.
@@ -29,13 +29,6 @@ const char * reversi_cell_strings_long[REVERSI_NUM_TOKEN_TYPES] = {
     ANSI_COLOR_BLUE "blue" ANSI_COLOR_RESET,
     ANSI_COLOR_RED  "red" ANSI_COLOR_RESET
 };
- /*
-const char * reversi_cell_strings_long[REVERSI_NUM_TOKEN_TYPES] = {
-    " ", 
-    "blue",
-    "red"
-};
-*/
 
 /*
  * The default startup board. You just need to copy this board (not copy
@@ -126,7 +119,6 @@ static void reversi_draw_cell(const char * contents,
  */
 void reversi_gameboard_init(reversi_gameboard board)
 {
-    /* TODO: Investigate memcpy version */
     int i, j;
     for (i = 0; i < REVERSI_BOARDHEIGHT; i++) 
     {
@@ -147,13 +139,13 @@ void reversi_gameboard_init(reversi_gameboard board)
 void reversi_gameboard_display(reversi_gameboard board)
 {
 
-    int height = REVERSI_BOARDHEIGHT + 1;   /* Header row */
-    int width = REVERSI_BOARDWIDTH + 2;     /* Leading and trailing cells */
-    int cell_width;                         /* Calculated cell width */
-    char row_index[NUMLEN];                 /* Row index as string */                  
-    char column_index[NUMLEN];              /* Column index as string */
-    enum reversi_cell_contents content;     /* Content of individual cell */
-    int i, j;                               /* Loop indicies */
+    int height = REVERSI_BOARDHEIGHT + 1;   /* For header row */
+    int width = REVERSI_BOARDWIDTH + 2;     /* For leading and trailing cells */
+    int cell_width;
+    char row_index[NUMLEN];
+    char column_index[NUMLEN];
+    enum reversi_cell_contents content;
+    int i, j;
 
     BOOLEAN first_row;
     BOOLEAN first_column;
@@ -168,9 +160,9 @@ void reversi_gameboard_display(reversi_gameboard board)
             sprintf(column_index, "%d", j);
 
             /* For convenience and code readability */
-            first_row = (i == 0) ? TRUE : FALSE;
-            first_column = (j == 0) ? TRUE : FALSE;
-            last_column = (j == width - 1) ? TRUE : FALSE;
+            first_row = (i == 0);
+            first_column = (j == 0);
+            last_column = (j == width - 1);
 
             /* First column has leading space, just to make it difficult */
             if (first_column)
@@ -209,27 +201,12 @@ void reversi_gameboard_display(reversi_gameboard board)
             else
             {
                 /* Offset for extra cells */
-                content = board[i - 1][j - 1]; 
+                content = board[i - 1][j - 1];
                 reversi_draw_cell(
                     reversi_cell_strings[content], 
                     cell_width, 
                     !last_column
                 );
-                /* This is for windows only */
-                /*
-                if (content == CC_BLUE)
-                {
-                    reversi_draw_cell("B", cell_width, !last_column);
-                }
-                else if (content == CC_RED)
-                {
-                    reversi_draw_cell("R", cell_width, !last_column);
-                }
-                else 
-                {
-                    reversi_draw_cell(SPACE_CHAR, cell_width, !last_column);
-                }
-                */
             }
         }
         printf("\n");

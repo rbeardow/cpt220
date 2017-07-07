@@ -21,6 +21,10 @@
 #define MOVE_STR_LEN 3
 #define REVERSI_MAX_STACK 200
 #define DELIMS ","
+
+/*
+ * Useful characters and error codes.
+ */
 #define BANNER_CHAR "-"
 #define SPACE_CHAR " "
 #define EMPTY_CHAR ""
@@ -45,8 +49,8 @@ enum input_result
 BOOLEAN request_quit_confirmation();
 
 /* 
- * Helper function to request a string from stdio.
- * No input (enter) is considered a return to menu request.
+ * Helper function to request a string from stdin.
+ * No input (enter) and Ctrl+D are considered a return to menu request.
  */
 enum input_result request_string(char * msg, int length, char * string);
 
@@ -66,9 +70,6 @@ void draw_underline(char * msg);
  */
 int parse_pos_int(char * input);
 
-/*
- * TODO: Decent comment for read_read_of_line.
- */
 void read_rest_of_line(void);
 
 #endif

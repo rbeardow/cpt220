@@ -14,11 +14,6 @@
 #define REVERSI_PLAYER_H
 #define REVERSI_NAMELEN 20
 
-/* 
- * Defines the first player colour 
- */
-#define REVERSI_FIRST_PLAYER CC_BLUE
-
 /*
  * Definition of the player's details. We need their name, their 
  * color (token) and the current number of tokens they have on the 

@@ -43,4 +43,14 @@ typedef enum {
  */
 #define REVERSI_INITIAL_SCORE 0;
 
+/* 
+ * Defines the first player colour
+ */
+#define REVERSI_FIRST_PLAYER CC_BLUE
+
+/* 
+ * Defines the second player colour
+ */
+#define REVERSI_SECOND_PLAYER CC_RED
+
 #endif

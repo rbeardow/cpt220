@@ -40,11 +40,6 @@
 #define REVERSI_NUM_TOKEN_TYPES 3
 
 /* 
- * Valid string length for input coordinates 
- */
-#define REVERSI_COORD_LEN 3
-
-/* 
  * Enum which represents possible contents of each cell. 
  */
 enum reversi_cell_contents 

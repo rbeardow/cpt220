@@ -11,9 +11,6 @@
 #include "reversi_player.h"
 #include "reversi_gamerules.h"
 
-/*
- *
- */
 static BOOLEAN reversi_is_valid_coord(int n)
 {
     if (n > 0 && n <= REVERSI_BOARDWIDTH && n <= REVERSI_BOARDHEIGHT)
@@ -84,14 +81,14 @@ static BOOLEAN reversi_parse_coords(char * input,
  */
 static enum input_result reversi_request_coords(struct reversi_coordinate * coords)
 {
-    char coords_input[REVERSI_COORD_LEN + 1];
+    char coords_input[MOVE_STR_LEN + 1];
     enum input_result coord_result;
     do
     {
         coord_result = request_string
         (
             "Please enter a move as a comma separated coordinate pair: ", 
-            REVERSI_COORD_LEN, 
+            MOVE_STR_LEN, 
             coords_input
         );
         if (coord_result == IR_SUCCESS)
@@ -143,9 +140,8 @@ enum input_result reversi_player_move(struct reversi_player * player,
     struct reversi_coordinate coords;
     enum input_result coord_result;
 
-    reversi_player_calc_score(board, player);
     printf("It is %s's turn and their colour is %s\n", player->name, colour);
-    printf("Their score is currently: %d\n", player->score);
+    printf("Their score is currently: %d\n", player->score); 
 
     do
     {

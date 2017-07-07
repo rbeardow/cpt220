@@ -8,7 +8,9 @@
 
 #include "reversi_helpers.h"
 
-
+/*
+ * Prints the specified string the specified number of times.
+ */
 void print_repeat(char * msg, int times)
 {
     int i;
@@ -18,6 +20,9 @@ void print_repeat(char * msg, int times)
     }
 }
 
+/*
+ * Prints the specified string and draws a line under it of the same length.
+ */
 void draw_underline(char * msg)
 {
     int length = strlen(msg);
@@ -26,6 +31,9 @@ void draw_underline(char * msg)
     printf("\n");
 }
 
+/*
+ * Parses a positive integer from a string.
+ */
 int parse_pos_int(char * input)
 {
     char * remaining;
@@ -43,7 +51,7 @@ int parse_pos_int(char * input)
  * really only two types of results from this request - positive ('y') and 
  * negative (everything else). I did notice this is different behaviour than
  * the sample, however on the discussion boards you suggested that only accepting
- * 'y' to quite is the correct behaviour.
+ * 'y' to quit is the correct behaviour.
  */
 BOOLEAN request_quit_confirmation()
 {
@@ -62,12 +70,17 @@ BOOLEAN request_quit_confirmation()
     return FALSE;
 }
 
+/*
+ * Requests a string from stdin with a prompt and will populate string on success. 
+ * Attempts to handle newline and Ctrl+D as a signal to quit and will return IR_RTM. 
+ * Will return IR_FAILURE if the entered string is longer than length.
+ */
 enum input_result request_string(char * msg, int length, char * string)
 {
-    char * input;
-    input = malloc(length + REVERSI_EXTRACHARS);
+    char * input = malloc(length + REVERSI_EXTRACHARS);
     if (input == NULL)
     {
+        free(input);
         printf("Error: cannot allocate memory for input string in request_string.");
         exit(EXIT_FAILURE);
     }
@@ -79,37 +92,30 @@ enum input_result request_string(char * msg, int length, char * string)
         {
             if (input[strlen(input) - 1] != '\n')
             {
-                printf("Error: input was too long.\n");
+                printf("Error: input string was too long.\n");
                 read_rest_of_line();
             }
             else
             {
+                input[strlen(input) - 1] = '\0';
+                strcpy(string, input);
                 break;
             }
         }
         else
-        {
+        {   
             break;
         }
     }
     while (TRUE);
 
-    /*
-     * Null terminate the input string from the user and copy it to the 
-     * output variable.
-     */
-    printf("String length is %d\n", strlen(input));
-    input[strlen(input) - 1] = '\0';
-    strcpy(string, input);
     free(input);
-
-    /* If the string was empty, assume return to menu. */
     if (strlen(string) == 0)
     {
         return IR_RTM;
     }
-
     return IR_SUCCESS;
+
 }
 
 /**

@@ -235,7 +235,7 @@ BOOLEAN reversi_rules_applymove(reversi_gameboard board,
  * Returns TRUE if the player CANNOT make a move i.e. TRUE if gameover.
  * 
  * This is simply implemented as a brute force check of all directions from all
- * empty cells. For now, this works - but it could be optimised.
+ * empty cells.
  */
 BOOLEAN reversi_rules_gameover(reversi_gameboard board, 
                                struct reversi_player * player)

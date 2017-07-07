@@ -103,6 +103,7 @@ struct reversi_player_pair reversi_play_game(struct reversi_player players[])
     }
     while (init_result != IR_SUCCESS);
 
+    /* Randomise player start */
     player_pair = reversi_random_start(players);
     current_player = player_pair.first;
     other_player = player_pair.second;
@@ -168,7 +169,7 @@ struct reversi_player_pair reversi_random_start(struct reversi_player players[])
 
     pair.first = &players[first_index];
     pair.second = &players[second_index];
-    pair.first->token = CC_BLUE;
-    pair.second->token = CC_RED;
+    pair.first->token = REVERSI_FIRST_PLAYER;
+    pair.second->token = REVERSI_SECOND_PLAYER;
     return pair;
 }
