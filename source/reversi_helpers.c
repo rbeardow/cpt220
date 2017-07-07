@@ -92,6 +92,7 @@ enum input_result request_string(char * msg, int length, char * string)
         {
             printf("Error: input string was too long.\n");
             read_rest_of_line();
+            free(input);
             return IR_FAILURE;
         }
         else
