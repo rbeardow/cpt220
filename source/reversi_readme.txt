@@ -6,22 +6,19 @@
 * Start up code provided by Paul Miller
 ***********************************************************************/
 
-Please write any comments about your implementation which may be useful for
-your marker or a user of your program.
+This was a challenging assignment but also very satisfying. There were lots of 
+meaty problems with edge cases that needed to be handled. I found the startup 
+code to perhaps guide me to a program structure that I probably wouldn't have 
+done myself if starting from a blank page. That being said, I tried to respect
+the style of the structures and functions and reflect them in my implementation.
 
+Overall I am happy with the implementation. It's not perfect, but no software
+ever is. Parts I would focus on improving are:
 
-This was a reasonably challenging assignment but also very satisfying. There
-were lots of meaty problems with edge cases that needed to be handled. 
-Working at such a low level was frustrating at first after working with higher
-level languages with vast built in libraries. After a while, however, you shift
-modes and start to see the C patterns and idioms a bit more clearly.
+* I don't like the duplication of code in the initialisation of players i.e. 
+init player one and then just do the same thing to player two.
+* Handling input strings, newlines and Ctrl+D (EOF) was hard. I'm confident it 
+works, but it is certainly not elegant.
 
-I went to a lot of trouble to stop myself from modifying the functions and 
-parameters that were provided in the startup code. No doubt some of them were
-written that way to force people down paths to prove competence. 
-
-
-
-
-
-
+The source for this assignment is also available in my home directory in 
+/assignment1/cpt220 with the complete history in a git repository.
