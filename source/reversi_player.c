@@ -27,12 +27,12 @@ static BOOLEAN reversi_validate_int(int n)
 {
     if (n == PARSE_INT_FAILURE)
     {
-        printf("Error: please specify a valid integer\n");
+        printf("Error: please specify a valid integer.\n");
         return FALSE;
     }
     else if (!reversi_is_valid_coord(n))
     {
-        printf("Error: please specify a coordinate on the board\n");
+        printf("Error: please specify a coordinate on the board.\n");
         return FALSE;
     }
     return TRUE;
@@ -69,13 +69,13 @@ static BOOLEAN reversi_parse_coords(char * input,
                 }
             }
         }
-        
+        printf("Error: please specify coordinates in the format x,y.\n");
     }
     else if (input_length > MOVE_STR_LEN) {
-        printf("Error: coordinates entered are too long\n");
+        printf("Error: coordinates entered are too long.\n");
     }
     else if (input_length < MOVE_STR_LEN) {
-        printf("Error: coordinates entered are too short\n");
+        printf("Error: coordinates entered are too short.\n");
     }
     return FALSE;
 }
