@@ -57,15 +57,19 @@ static BOOLEAN reversi_parse_coords(char * input,
             if (reversi_validate_int(x))
             {
                 result = strtok(NULL, DELIMS);
-                y = parse_pos_int(result);
-                if (reversi_validate_int(y))
+                if (result != NULL)
                 {
-                    coords->x = x;
-                    coords->y = y;
-                    return TRUE;
+                    y = parse_pos_int(result);
+                    if (reversi_validate_int(y))
+                    {
+                        coords->x = x;
+                        coords->y = y;
+                        return TRUE;
+                    }
                 }
             }
         }
+        
     }
     else if (input_length > MOVE_STR_LEN) {
         printf("Error: coordinates entered are too long\n");
