@@ -85,37 +85,31 @@ enum input_result request_string(char * msg, int length, char * string)
         exit(EXIT_FAILURE);
     }
 
-    do
+    printf(msg);
+    if (fgets(input, length + REVERSI_EXTRACHARS, stdin) != NULL)
     {
-        printf(msg);
-        if (fgets(input, length + REVERSI_EXTRACHARS, stdin) != NULL)
+        if (input[strlen(input) - 1] != '\n')
         {
-            if (input[strlen(input) - 1] != '\n')
-            {
-                printf("Error: input string was too long.\n");
-                read_rest_of_line();
-            }
-            else
-            {
-                input[strlen(input) - 1] = '\0';
-                strcpy(string, input);
-                break;
-            }
+            printf("Error: input string was too long.\n");
+            read_rest_of_line();
         }
         else
-        {   
-            break;
+        {
+            input[strlen(input) - 1] = '\0';
+            strcpy(string, input);
+            free(input);
+            if (strlen(string) == 0)
+            {
+                return IR_RTM;
+            }
         }
     }
-    while (TRUE);
-
-    free(input);
-    if (strlen(string) == 0)
-    {
+    else
+    {   
+        free(input);
         return IR_RTM;
     }
     return IR_SUCCESS;
-
 }
 
 /**
