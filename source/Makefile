@@ -24,7 +24,7 @@ LINKED_LIST_OBJECTS=$(COMMON_OBJECTS) reversi_linked_list.o
 
 # C Compiler, compiler, and linker flags
 C_COMPILER=gcc
-C_COMPILER_FLAGS=-ansi -Wall -pedantic -g
+C_COMPILER_FLAGS=-ansi -Wall -pedantic
 LINKER_FLAGS=
 ARRAY_OUTPUT_EXE=reversi_array
 LINKED_OUTPUT_EXE=reversi_linked
