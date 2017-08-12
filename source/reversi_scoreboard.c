@@ -27,6 +27,7 @@ void reversi_scoreboard_clear(struct reversi_scoreboard * scoreboard)
     if (scoreboard->fname != NULL)
     {
         free((char *) scoreboard->fname);
+        scoreboard->fname = NULL;
     }
 }
 

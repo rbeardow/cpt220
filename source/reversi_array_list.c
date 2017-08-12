@@ -89,6 +89,7 @@ BOOLEAN reversi_list_remove(struct reversi_list * list, int index)
         return FALSE;
     }
     free(list->scores[index]);
+    list->scores[index] = NULL;
     for (i = index; i < list->num_scores; i++)
     {
         list->scores[i] = list->scores[i + 1];
@@ -104,6 +105,7 @@ void reversi_list_clear(struct reversi_list * list)
     for (i = 0; i < list->num_scores; i++)
     {
         free(list->scores[i]);
+        list->scores[i] = NULL;
     }
     list->num_scores = 0;
 }

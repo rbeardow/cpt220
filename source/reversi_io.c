@@ -99,12 +99,17 @@ BOOLEAN save_data(struct reversi_scoreboard * scoreboard, const char * fname)
         );
     }
     fclose(scores_file);
-
-    if (strcmp(scoreboard->fname, fname) != 0)
+    
+    if (scoreboard->fname != NULL && strcmp(scoreboard->fname, fname) != 0)
     {
         free((char*) scoreboard->fname);
+        scoreboard->fname = NULL;
+    }
+    if (scoreboard->fname == NULL)
+    {
         scoreboard->fname = strdup(fname);
     }
-    printf("File %s saved successfully\n", fname);
+    
+    printf("File %s saved successfully\n", scoreboard->fname);
     return TRUE;
 }
